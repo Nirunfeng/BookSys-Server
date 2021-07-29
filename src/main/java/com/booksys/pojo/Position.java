@@ -8,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Data
-@NoArgsConstructor
 @Accessors(chain = true)
 @Table(name = "t_position")
 public class Position {
@@ -22,6 +20,41 @@ public class Position {
     private String address;
     @Column(name = "time")
     private String time;
+
+    public Position() {
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getPid() {
+        return pid;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getTime() {
+        return time;
+    }
 
     public Position(int pid, int userid, String address, String time) {
         this.pid = pid;
