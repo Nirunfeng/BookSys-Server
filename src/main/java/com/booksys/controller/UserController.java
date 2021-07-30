@@ -113,4 +113,35 @@ public class UserController {
         map.put("pageInfo",pageInfo);
         return map;
     }
+
+    /**
+     * 添加用户业务
+     * @param account
+     * @param name
+     * @param sex
+     * @param condi
+     * @return
+     */
+    @RequestMapping("/addReader")
+    public Map<String,Object> addUser(@RequestParam("account") String account,@RequestParam("name") String name,@RequestParam("sex") String sex,@RequestParam("condi") int condi){
+        /*1.声明返回结果*/
+        Map<String,Object> map=new HashMap<>();
+        /*2.判断是否有重复*/
+        if(readerMapper.selectByAccount(account)!=null){
+            /*2.1.重复，返回失败*/
+            map.put("status","no");
+       }else{
+            //默认密码，可更改密码生成逻辑
+            String password="123456";
+            //当前注册时间
+            String time=DateTimeUtil.getDate();
+            Reader reader=new Reader(account,password,name,sex,time,condi);
+            readerMapper.insert(reader);
+            //返回状态码
+            map.put("status","ok");
+        }
+
+        //返回map
+        return map;
+    }
 }
