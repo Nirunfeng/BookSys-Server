@@ -127,7 +127,7 @@ public class UserController {
         /*1.声明返回结果*/
         Map<String,Object> map=new HashMap<>();
         /*2.判断是否有重复*/
-        if(readerMapper.selectByAccount(account)!=null){
+        if(readerMapper.selectByAccount(account).size()!=0){
             /*2.1.重复，返回失败*/
             map.put("status","no");
        }else{

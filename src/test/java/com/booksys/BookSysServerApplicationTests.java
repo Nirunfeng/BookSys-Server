@@ -29,6 +29,8 @@ class BookSysServerApplicationTests {
 
         /*将list存入集合*/
         redisUtil.setValue("list",list);
+
+        System.out.println(redisUtil.getValue("list"));
     }
 
 }

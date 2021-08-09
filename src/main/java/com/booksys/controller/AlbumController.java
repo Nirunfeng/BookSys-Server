@@ -7,11 +7,13 @@ import com.booksys.pojo.Album;
 import com.booksys.pojo.Borrowrecord;
 import com.booksys.pojo.Subalbum;
 import com.booksys.util.DateTimeUtil;
+import com.booksys.util.RedisUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,10 @@ public class AlbumController {
 
     @Autowired
     private BorrowrecordMapper borrowrecordMapper;
+
+    @Autowired
+    private  RedisUtil redisUtil;
+
     /**
      * 获取书目集合
      * @param title
@@ -40,9 +46,22 @@ public class AlbumController {
      */
     @RequestMapping(value = "/getAllAlbums",method = RequestMethod.POST)
     public Map<String,Object> getAllAlbums(@RequestParam("title")String title, @RequestParam("currentPage")int currentPage){
+        List<Album> list=new ArrayList<>();
+        /*声明返回值对象*/
         Map<String,Object> map=new HashMap<>();
         PageHelper.startPage(currentPage,10);
-        List<Album> list=albumMapper.selectByTitle(title);
+        /*查询缓存*/
+        if(redisUtil.getValue("list")==null){
+            /*查询数据库*/
+            list=albumMapper.selectByTitle(title);
+            /*存入缓存*/
+            redisUtil.setValue("list",list);
+        }else{
+            /*将缓存放入list*/
+            list=(List<Album>) redisUtil.getValue("list");
+        }
+
+
         PageInfo<Album> pageInfo=new PageInfo<>(list);
         map.put("pageInfo",pageInfo);
         map.put("albums",list);
