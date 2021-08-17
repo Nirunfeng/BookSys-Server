@@ -56,16 +56,38 @@ public class AlbumController {
             list=albumMapper.selectByTitle(title);
             /*存入缓存*/
             redisUtil.setValue("list",list);
+
+            /*将list存入map返回*/
+            PageInfo<Album> pageInfo=new PageInfo<>(list);
+            map.put("pageInfo",pageInfo);
+            map.put("albums",list);
+            return map;
         }else{
             /*将缓存放入list*/
-            list=(List<Album>) redisUtil.getValue("list");
+            List<Album> redisUtilValue=(List<Album>) redisUtil.getValue("list");
+
+            /*查询某本书籍*/
+            if(title!=""){
+                //TODO
+                for(int i=0;i<redisUtilValue.size();i++){
+                    if(redisUtilValue.get(i).getTitle().equals(title)){
+                        list.add(redisUtilValue.get(i));
+                    }
+                }
+
+                /*将list存入map返回*/
+                PageInfo<Album> pageInfo=new PageInfo<>(list);
+                map.put("pageInfo",pageInfo);
+            }else{
+
+                list=redisUtilValue;
+                /*将list存入map返回*/
+                PageInfo<Album> pageInfo=new PageInfo<>(list);
+                map.put("pageInfo",pageInfo);
+            }
+            map.put("albums",list);
+            return map;
         }
-
-
-        PageInfo<Album> pageInfo=new PageInfo<>(list);
-        map.put("pageInfo",pageInfo);
-        map.put("albums",list);
-        return map;
     }
 
     /**

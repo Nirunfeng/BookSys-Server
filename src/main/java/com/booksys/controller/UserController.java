@@ -31,9 +31,7 @@ public class UserController {
         Map<String,Object> map=new HashMap<>();
         Reader reader=readerMapper.selectWholeByAccount(account);
         if(reader!=null){
-            System.out.println("验证成功"+reader.getPassword().equals(password));
             if(reader.getPassword().equals(password)){
-                System.out.println("登录成功"+reader.getPassword().equals(password));
                 map.put("result","yes");
                 map.put("loginUser",reader);
                 if(reader.getCondi()==0){
