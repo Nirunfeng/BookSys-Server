@@ -70,7 +70,6 @@ public class AlbumController {
             if(title!=""){
                 //TODO
                 for(int i=0;i<redisUtilValue.size();i++){
-
                     if(redisUtilValue.get(i).getTitle().equals(title)){
                         list.add(redisUtilValue.get(i));
                     }
